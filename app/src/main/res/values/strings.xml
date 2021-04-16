@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">UpcomingGameReleases</string>
+    <string name="hello_text">Press to view all games</string>
 </resources>
