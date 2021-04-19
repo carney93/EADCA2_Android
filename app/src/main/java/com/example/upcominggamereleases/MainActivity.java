@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             RequestQueue queue = Volley.newRequestQueue(this);
             Log.d(TAG, "Making request");
             try {
-                if(searchView.getQuery().toString()!=""){
+                if(searchView.getQuery().toString().isEmpty()){
                 StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_URI,
                         new Response.Listener<String>() {
                             @Override
