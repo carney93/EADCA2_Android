@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.example.upcominggamereleases.Models.VideoGame;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
     // uri of RESTful service on Azure, note: https, cleartext support disabled by default
     private String SERVICE_URI = "https://ca2restfulservice.azurewebsites.net/orderbytitle";
+    private String SERVICE_SEARCH_URI = "https://ca2restfulservice.azurewebsites.net/searchbytitle/";
     private String SORT_BY_DATE = "https://ca2restfulservice.azurewebsites.net/OrderByDate";
     private String TAG = "EAD2CA2 APP";
 
@@ -70,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void callService(View v) {
         final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
-
+        final SearchView searchView = (SearchView) findViewById(R.id.searchView);
         try {
             RequestQueue queue = Volley.newRequestQueue(this);
             Log.d(TAG, "Making request");
             try {
+                if(searchView.getQuery().toString()!=""){
                 StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_URI,
                         new Response.Listener<String>() {
                             @Override
@@ -111,6 +114,45 @@ public class MainActivity extends AppCompatActivity {
                             }
                         });
                 queue.add(strObjRequest);
+                }
+                else{
+                    StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_SEARCH_URI+searchView.getQuery().toString(),
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+                                    //clear text
+                                    outputTextView.setText("");
+                                    Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {
+                                    }.getType();
+                                    List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
+                                    int count = 0;
+                                    for (int i = 0; i < vg.size(); i++) {
+                                        String ageRating = vg.get(i).ageRating;
+                                        String filter = v.getTag().toString();
+                                        String formattedDate = vg.get(i).releaseDate.substring(0, 10);
+                                        if (ageRating.equals(filter)) {
+                                            outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
+                                            count++;
+                                        } else if (filter.equals("all")) {
+                                            outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
+                                            count++;
+                                        }
+                                    }
+                                    if (count == 0) {
+                                        outputTextView.setText(getString(R.string.no_games));
+                                    }
+                                    Log.d(TAG, "Displaying data" + vg.toString());
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    outputTextView.setText(error.toString());
+                                    Log.d(TAG, "Error" + error.toString());
+                                }
+                            });
+                    queue.add(strObjRequest);
+                }
             } catch (Exception e1) {
                 Log.d(TAG, e1.toString());
                 outputTextView.setText(e1.toString());

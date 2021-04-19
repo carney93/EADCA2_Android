@@ -4,7 +4,7 @@
     tools:context="org.gc.helloworldvolleyclient.MainActivity">
 
     <item
-        android:id="@+id/nav_search"
+        android:id="@+id/searchView"
         android:icon="@drawable/ic_search"
         android:title="Search"
         app:actionViewClass="android.widget.SearchView"
