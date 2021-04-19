@@ -78,42 +78,42 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG, "Making request");
             try {
                 if(searchView.getQuery().toString().isEmpty()){
-                    StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_URI,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    //clear text
-                                    outputTextView.setText("");
-                                    Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {
-                                    }.getType();
-                                    List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
-                                    int count = 0;
-                                    for (int i = 0; i < vg.size(); i++) {
-                                        int ageRating = Integer.parseInt(vg.get(i).ageRating);
-                                        int filter = Integer.parseInt(v.getTag().toString());
-                                        String formattedDate = vg.get(i).releaseDate.substring(0, 10);
-                                        if (ageRating <= filter ) {
-                                            outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
-                                            count++;
-                                        } else if (filter == 0) {
-                                            outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
-                                            count++;
-                                        }
+                StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_URI,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //clear text
+                                outputTextView.setText("");
+                                Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {
+                                }.getType();
+                                List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
+                                int count = 0;
+                                for (int i = 0; i < vg.size(); i++) {
+                                    int ageRating = Integer.parseInt(vg.get(i).ageRating);
+                                    int filter = Integer.parseInt(v.getTag().toString());
+                                    String formattedDate = vg.get(i).releaseDate.substring(0, 10);
+                                    if (ageRating <= filter ) {
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
+                                        count++;
+                                    } else if (filter == 0) {
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
+                                        count++;
                                     }
-                                    if (count == 0) {
-                                        outputTextView.setText(getString(R.string.no_games));
-                                    }
-                                    Log.d(TAG, "Displaying data" + vg.toString());
                                 }
-                            },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    outputTextView.setText(error.toString());
-                                    Log.d(TAG, "Error" + error.toString());
+                                if (count == 0) {
+                                    outputTextView.setText(getString(R.string.no_games));
                                 }
-                            });
-                    queue.add(strObjRequest);
+                                Log.d(TAG, "Displaying data" + vg.toString());
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                outputTextView.setText(error.toString());
+                                Log.d(TAG, "Error" + error.toString());
+                            }
+                        });
+                queue.add(strObjRequest);
                 }
                 else{
                     StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_SEARCH_URI+searchView.getQuery().toString(),
@@ -127,13 +127,13 @@ public class MainActivity extends AppCompatActivity {
                                     List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
                                     int count = 0;
                                     for (int i = 0; i < vg.size(); i++) {
-                                        String ageRating = vg.get(i).ageRating;
-                                        String filter = v.getTag().toString();
+                                        int ageRating = Integer.parseInt(vg.get(i).ageRating);
+                                        int filter = Integer.parseInt(v.getTag().toString());
                                         String formattedDate = vg.get(i).releaseDate.substring(0, 10);
-                                        if (ageRating.equals(filter)) {
+                                        if (ageRating <= filter) {
                                             outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
                                             count++;
-                                        } else if (filter.equals("all")) {
+                                        } else if (filter == 0) {
                                             outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
                                             count++;
                                         }
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
                                 }.getType();
                                 List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
                                 for (int i = 0; i < vg.size(); i++) {
-                                    outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + vg.get(i).releaseDate + "\n\n");
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + vg.get(i).releaseDate + "\n\n");
                                 }
                                 Log.d(TAG, "Displaying data" + vg.toString());
                             }
