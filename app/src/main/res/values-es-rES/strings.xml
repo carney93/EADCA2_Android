@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Próximos lanzamientos</string>
+    <string name="hello_text">Presione para ver todos los juegos</string>
+    <string name="all_button">Todas las listas</string>
+    <string name="sort_by_date">Clasificar fechas</string>
+    <string name="title">Título</string>
+    <string name="age_rating">Clasificación de edad</string>
+    <string name="release_date">" Fecha de lanzamiento"</string>
+    <string name="no_games">No hay próximos juegos con esa clasificación por edad</string>
+</resources>

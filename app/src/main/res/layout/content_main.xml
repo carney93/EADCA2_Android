@@ -9,6 +9,7 @@
     tools:showIn="@layout/activity_main"
     android:orientation="vertical">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,6 +84,15 @@
             android:tag="18" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/filter_date"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginRight="1dp"
+        android:onClick="orderByDate"
+        android:text="@string/sort_by_date" />
+
 
     <ScrollView
         android:id="@+id/SCROLLER_ID"

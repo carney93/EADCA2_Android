@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UpcomingGameReleases</string>
+    <string name="app_name">Upcoming Releases</string>
     <string name="hello_text">Press to view all games</string>
     <string name="all_button">All Listings</string>
     <string name="filter_3">3+</string>
@@ -7,4 +7,9 @@
     <string name="filter_12">12+</string>
     <string name="filter_16">16+</string>
     <string name="filter_18">18+</string>
+    <string name="sort_by_date">Sort Dates</string>
+    <string name="title">Title</string>
+    <string name="age_rating">Age Rating</string>
+    <string name="release_date">Release Date</string>
+    <string name="no_games">"There are no upcoming games with that age rating"</string>
 </resources>

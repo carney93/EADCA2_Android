@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     // uri of RESTful service on Azure, note: https, cleartext support disabled by default
     private String SERVICE_URI = "https://ca2restfulservice.azurewebsites.net/orderbytitle";
+    private String SORT_BY_DATE = "https://ca2restfulservice.azurewebsites.net/OrderByDate";
     private String TAG = "EAD2CA2 APP";
 
     @Override
@@ -89,15 +90,55 @@ public class MainActivity extends AppCompatActivity {
                                     String filter = v.getTag().toString();
                                     String formattedDate = vg.get(i).releaseDate.substring(0, 10);
                                     if (ageRating.equals(filter)) {
-                                        outputTextView.setText(outputTextView.getText() + " Title:  " + vg.get(i).title + "\n" + " Age Rating:  " + vg.get(i).ageRating + "+" +  "\n" + " Release Date:  " + formattedDate + "\n\n");
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
                                         count++;
                                     } else if (filter.equals("all")) {
-                                        outputTextView.setText(outputTextView.getText() + " Title:  " + vg.get(i).title + "\n" + " Age Rating:  " + vg.get(i).ageRating + "+" + "\n" + " Release Date:  " + formattedDate + "\n\n");
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
                                         count++;
                                     }
                                 }
                                 if (count == 0) {
-                                    outputTextView.setText("There are no upcoming games with that age rating");
+                                    outputTextView.setText(getString(R.string.no_games));
+                                }
+                                Log.d(TAG, "Displaying data" + vg.toString());
+                            }
+                        },
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                                outputTextView.setText(error.toString());
+                                Log.d(TAG, "Error" + error.toString());
+                            }
+                        });
+                queue.add(strObjRequest);
+            } catch (Exception e1) {
+                Log.d(TAG, e1.toString());
+                outputTextView.setText(e1.toString());
+            }
+        } catch (Exception e2) {
+            Log.d(TAG, e2.toString());
+            outputTextView.setText(e2.toString());
+        }
+    }
+
+    public void orderByDate(View v) {
+        final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
+
+        try {
+            RequestQueue queue = Volley.newRequestQueue(this);
+            Log.d(TAG, "Making request");
+            try {
+                StringRequest strObjRequest = new StringRequest(Request.Method.GET, SORT_BY_DATE,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                //clear text
+                                outputTextView.setText("");
+                                Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {
+                                }.getType();
+                                List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
+                                for (int i = 0; i < vg.size(); i++) {
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + vg.get(i).releaseDate + "\n\n");
                                 }
                                 Log.d(TAG, "Displaying data" + vg.toString());
                             }
