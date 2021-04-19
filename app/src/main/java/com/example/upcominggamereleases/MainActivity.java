@@ -180,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
                                 }.getType();
                                 List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
                                 for (int i = 0; i < vg.size(); i++) {
-                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + vg.get(i).releaseDate + "\n\n");
+                                    String formattedDate = vg.get(i).releaseDate.substring(0, 10);
+                                        outputTextView.setText(outputTextView.getText() + getString(R.string.title) + ":    " + vg.get(i).title + "\n" + getString(R.string.age_rating) + ":    " + vg.get(i).ageRating + "+" +  "\n" + getString(R.string.release_date) + ":    " + formattedDate + "\n\n");
                                 }
                                 Log.d(TAG, "Displaying data" + vg.toString());
                             }
