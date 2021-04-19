@@ -23,7 +23,7 @@
             android:nestedScrollingEnabled="true"
             android:onClick="callService"
             android:text="@string/all_button"
-            android:tag="all"
+            android:tag="0"
  />
 
         <Button
