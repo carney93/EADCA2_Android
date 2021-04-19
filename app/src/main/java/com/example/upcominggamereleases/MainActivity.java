@@ -68,51 +68,54 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void callService(View v)
-    {
+    public void callService(View v) {
         final TextView outputTextView = (TextView) findViewById(R.id.outputTextView);
 
-        try
-        {
+        try {
             RequestQueue queue = Volley.newRequestQueue(this);
             Log.d(TAG, "Making request");
-            try
-            {
+            try {
                 StringRequest strObjRequest = new StringRequest(Request.Method.GET, SERVICE_URI,
-                        new Response.Listener<String>()
-                        {
+                        new Response.Listener<String>() {
                             @Override
-                            public void onResponse(String response)
-                            {
+                            public void onResponse(String response) {
                                 //clear text
                                 outputTextView.setText("");
-                                Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {}.getType();
+                                Type listOfGames = new TypeToken<ArrayList<VideoGame>>() {
+                                }.getType();
                                 List<VideoGame> vg = new Gson().fromJson(response, listOfGames);
-                                for(int i=0; i<vg.size();i++){
-                                    outputTextView.setText(outputTextView.getText()+" Title:  "+vg.get(i).title + "\n" + " Age Rating:  " +vg.get(i).ageRating + "\n" + " Release Date:  "+ vg.get(i).releaseDate+ "\n\n");
+                                int count = 0;
+                                for (int i = 0; i < vg.size(); i++) {
+                                    String ageRating = vg.get(i).ageRating;
+                                    String filter = v.getTag().toString();
+                                    String formattedDate = vg.get(i).releaseDate.substring(0, 10);
+                                    if (ageRating.equals(filter)) {
+                                        outputTextView.setText(outputTextView.getText() + " Title:  " + vg.get(i).title + "\n" + " Age Rating:  " + vg.get(i).ageRating + "+" +  "\n" + " Release Date:  " + formattedDate + "\n\n");
+                                        count++;
+                                    } else if (filter.equals("all")) {
+                                        outputTextView.setText(outputTextView.getText() + " Title:  " + vg.get(i).title + "\n" + " Age Rating:  " + vg.get(i).ageRating + "+" + "\n" + " Release Date:  " + formattedDate + "\n\n");
+                                        count++;
+                                    }
+                                }
+                                if (count == 0) {
+                                    outputTextView.setText("There are no upcoming games with that age rating");
                                 }
                                 Log.d(TAG, "Displaying data" + vg.toString());
                             }
                         },
-                        new Response.ErrorListener()
-                        {
+                        new Response.ErrorListener() {
                             @Override
-                            public void onErrorResponse(VolleyError error)
-                            {
+                            public void onErrorResponse(VolleyError error) {
                                 outputTextView.setText(error.toString());
                                 Log.d(TAG, "Error" + error.toString());
                             }
                         });
                 queue.add(strObjRequest);
-            }
-            catch (Exception e1)
-            {
+            } catch (Exception e1) {
                 Log.d(TAG, e1.toString());
                 outputTextView.setText(e1.toString());
             }
-        }
-        catch (Exception e2)
-        {
+        } catch (Exception e2) {
             Log.d(TAG, e2.toString());
             outputTextView.setText(e2.toString());
         }

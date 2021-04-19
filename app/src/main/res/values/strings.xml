@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">UpcomingGameReleases</string>
     <string name="hello_text">Press to view all games</string>
-    <string name="call_button_text">Call Service</string>
+    <string name="all_button">All Listings</string>
+    <string name="filter_3">3+</string>
+    <string name="filter_9">9+</string>
+    <string name="filter_12">12+</string>
+    <string name="filter_16">16+</string>
+    <string name="filter_18">18+</string>
 </resources>
